@@ -65,7 +65,7 @@
                     coords.lat = response.data[i].latlng[0];
                     coords.lng = response.data[i].latlng[1];
                     var options = {
-                        zoom: 4,
+                        zoom: 6,
                         center: { lat: response.data[i].latlng[0], lng: response.data[i].latlng[1] }
                     }
                     // New map
@@ -73,15 +73,18 @@
                     obj.coords = coords;
                     obj.iconImage = 'https://maps.google.com/mapfiles/ms/icons/yellow.png';
                     obj.content = '<p> </b>' + response.data[i].name + '</p>' +
-                        '<p><b> Population </b>: ' + response.data[i].population + '</p>' +
-                        '<p><b> Capital </b>:  ' + response.data[i].capital + '</p>' +
-                        '<p><b> Region </b>' + response.data[i].region + '</p>' +
-                        '<p><b> Subregion </b>' + response.data[i].subregion + '</p>' +
-                        '<p><b> Demonym </b>' + response.data[i].demonym + '</p>' +
-                        '<p><b> Timezones </b>' + response.data[i].timezones + '</p>' +
-                        '<p><b> Area </b>' + response.data[i].area + '</p>' +
-                        '<p><b> NativeName </b>' + response.data[i].nativeName + '</p>' +
-                        '<p><b> NumericCode </b>' + response.data[i].numericCode + '</p>';
+                        '<p><b> Population : </b> ' + response.data[i].population + '</p>' +
+                        '<p><b> Capital : </b>  ' + response.data[i].capital + '</p>' +
+                        '<p><b> Region : </b>' + response.data[i].region + '</p>' +
+                        '<p><b> Subregion : </b>' + response.data[i].subregion + '</p>' +
+                        '<p><b> Demonym : </b>' + response.data[i].demonym + '</p>' +
+                        '<p><b> Timezones : </b>' + response.data[i].timezones + '</p>' +
+                        '<p><b> Area : </b>' + response.data[i].area + '</p>' +
+                        '<p><b> NativeName : </b>' + response.data[i].nativeName + '</p>' +
+                        '<p><b> Borders : </b>' + response.data[i].borders + '</p>'+
+                        '<p><b> Languages : </b>' + response.data[i].languages + '</p>'+
+                        '<p><b> Calling Codes : </b>' + response.data[i].callingCodes + '</p>'+
+                        '<p><b> Currencies : </b>' + response.data[i].currencies + '</p>';
                     markers.push(obj);
 
                 }
