@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+    #map {
+        height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        margin-top: 2%;
+        background-color: lightblue;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="conatiner">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form class="form-horizonatal" id="location-form">
+                    <div class="form-group">
+                        <input type="text" id="location-input" class="form-control" placeholder="Enter city,country, etc.. name">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+    <script>
+    function initMap() {
+        // Map options
+        var options = {
+            zoom: 4,
+            center: { lat: 20.5937, lng: 78.9629 }
+        }
+        // New map
+        var map = new google.maps.Map(document.getElementById('map'), options);
+        var locationForm = document.getElementById('location-form');
+        locationForm.addEventListener('submit', geocode);
+        var markers = [];
+
+        function geocode(e) {
+            // Prevent actual submit
+            e.preventDefault();
+            var location = document.getElementById('location-input').value;
+            axios.post('searchresult', { search: location }).then(function(response) {
+                console.log("datra is : " + response.data[0].latlng[0]);
+                for (var i = 0; i < response.data.length; i++) {
+                    var obj = {};
+                    var coords = {};
+                    coords.lat = response.data[i].latlng[0];
+                    coords.lng = response.data[i].latlng[1];
+                    obj.coords = coords;
+                    obj.iconImage = 'https://maps.google.com/mapfiles/ms/icons/yellow.png';
+                    obj.content = '<p> </b>' + response.data[i].name + '</p>' +
+                        '<p><b> Population </b>: ' + response.data[i].population + '</p>' +
+                        '<p><b> Capital </b>:  ' + response.data[i].capital + '</p>' +
+                        '<p><b> Region </b>' + response.data[i].region + '</p>' +
+                        '<p><b> Subregion </b>' + response.data[i].subregion + '</p>' +
+                        '<p><b> Demonym </b>' + response.data[i].demonym + '</p>' +
+                        '<p><b> Timezones </b>' + response.data[i].timezones + '</p>' +
+                        '<p><b> Area </b>' + response.data[i].area + '</p>' +
+                        '<p><b> NativeName </b>' + response.data[i].nativeName + '</p>' +
+                        '<p><b> NumericCode </b>' + response.data[i].numericCode + '</p>';
+                    markers.push(obj);
+
+                }
+
+                for (var i = 0; i < markers.length; i++) {
+                    // Add marker
+                    addMarker(markers[i]);
+                }
+
+                function addMarker(props) {
+                    var marker = new google.maps.Marker({
+                        position: props.coords,
+                        map: map,
+                        //icon:props.iconImage
+                    });
+                    // Check for customicon
+                    if (props.iconImage) {
+                        // Set icon image
+                        marker.setIcon(props.iconImage);
+                    }
+                    // Check content
+                    if (props.content) {
+                        var infoWindow = new google.maps.InfoWindow({
+                            content: props.content
+                        });
+                        marker.addListener('click', function() {
+                            infoWindow.open(map, marker);
+                        });
+                    }
+                }
+
+
+
+            });
+        }
+
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDY0Un8yFdxJE8i6gXwtjQCRjGbEOXwCLY&callback=initMap" async defer></script>
+</body>
+
+</html>
